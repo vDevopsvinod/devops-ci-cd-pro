@@ -2,25 +2,21 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repo') {
+        stage('Clone Code') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/vDevopsvinod/devops-ci-cd-pro.git'
+                git 'https://github.com/vDevopsvinod/devops-ci-cd-pro.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t devops-ci-cd-pro:jenkins .'
+                sh 'docker build -t devops-ci-cd-pro:v1 .'
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Run Container') {
             steps {
-                sh '''
-                docker rm -f devops-app || true
-                docker run -d -p 8080:80 --name devops-app devops-ci-cd-pro:jenkins
-                '''
+                sh 'docker run -d -p 8081:80 --name devops-app-jenkins devops-ci-cd-pro:v1 || true'
             }
         }
     }
